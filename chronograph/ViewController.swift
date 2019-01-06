@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var rightButton: UIButton!
     @IBOutlet weak var leftButton: UIButton!
+    @IBOutlet weak var show: UITextField!
     var timer: Timer!
     
     // 数据变量
@@ -29,18 +30,19 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         
-        setupUI()
+       setupUI()
     }
     
     @IBAction func rightAction(_ sender: UIButton) {
         if !isStart {
             
             isStart = true
-            self.setButtonState(leftButton, isEnabled: true)
+            self.setButtonState(leftButton, isEnabled: true)//检测按钮是否可用
             self.leftButton.setTitle("记录", for: .normal)
             self.rightButton.setTitle("停止", for: .normal)
             
-            self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+            self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTime),
+                                              userInfo: nil, repeats: true)
             
         }
         else {
@@ -81,7 +83,8 @@ class ViewController: UIViewController {
             recordCnt += 1
             
             let recordLabel = UILabel()
-            recordLabel.frame = CGRect(x: 40, y: self.view.frame.height/2 + CGFloat(recordCnt)*cRecordH, width: self.view.frame.width-80, height: cRecordH)
+            recordLabel.frame = CGRect(x: 40, y: self.view.frame.height/2 + CGFloat(recordCnt)*cRecordH,
+                                       width: self.view.frame.width-80, height: cRecordH)
             recordLabel.text = String(format: "Record %d:  %@", recordCnt, self.timeLabel.text!)
             recordLabel.font = UIFont.systemFont(ofSize: 20)
             recordLabel.textColor = UIColor.white
@@ -110,9 +113,7 @@ extension ViewController {
         recordArray = [UILabel]()
         cButtonH = self.leftButton.frame.width
         
-        // 设置按钮形状为圆形
-        self.rightButton.layer.cornerRadius = cButtonH / 2
-        self.leftButton.layer.cornerRadius = cButtonH / 2
+
         
         // 初始化控件属性
         self.updateTime()
@@ -125,11 +126,14 @@ extension ViewController {
         if !isStart {
             let timeStr = String(format: "%02d:%02d:%02d", 0, 0, 0)
             self.timeLabel.text = timeStr
+            self.show.text = timeStr
         }
         else {
             msCnt += 1
             let timeStr = String(format: "%02d:%02d:%02d", msCnt/6000, (msCnt/100)%60, msCnt%100)
             self.timeLabel.text = timeStr
+            self.show.text = timeStr
+            
         }
     }
     
